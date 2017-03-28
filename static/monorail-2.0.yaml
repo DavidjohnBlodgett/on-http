@@ -1,6 +1,6 @@
 info:
-  title: rackhd api 
-  version: "2.1.0" 
+  title: rackhd api
+  version: "2.1.0"
 basePath: /api/2.0
 consumes:
 - application/json
@@ -77,7 +77,7 @@ definitions:
         items:
           type: object
   hooks.2.0_HookPost:
-    description: Hook post schema 
+    description: Hook post schema
     type: object
     properties:
       url:
@@ -1304,6 +1304,52 @@ paths:
       - Write
       - nodesRemove
     x-swagger-router-controller: nodes
+  /nodes/readonly:
+    get:
+      description: Get a list of all nodes currently in readonly mode.
+      operationId: nodesGetAllReadOnly
+      parameters:
+      - description: Query string specifying properties to search for
+        in: query
+        name: $skip
+        required: false
+        type: integer
+      - description: Query string specifying properties to search for
+        in: query
+        name: $top
+        required: false
+        type: integer
+      - name: sort
+        in: query
+        description: Query string specifying properties to sort with
+        required: false
+        type: string
+        pattern: '[- +]{0,1}(name|id)'
+      responses:
+        200:
+          description: Successfully retrieved the list of readonly nodes
+          schema:
+            items:
+              type: object
+            type: array
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+      summary: Get a list of nodes in readonly mode.
+      tags:
+      - /api/2.0
+      x-authentication-type:
+      - jwt
+      x-privileges:
+      - Read
+      - nodesRead
+      x-view: node.2.0.json
+    x-swagger-router-controller: nodes
   /nodes/{identifier}:
     delete:
       description: Delete the specified node.
@@ -1907,7 +1953,7 @@ paths:
         name: identifier
         required: true
         type: string
-      - description: 
+      - description:
           The name property set to the injectableName property of the workflow graph
         in: body
         name: body
@@ -2557,7 +2603,7 @@ paths:
         name: mac
         required: false
         type: string
-      - description: 
+      - description:
           When macs parameters is not passed, passed with MAC adds IP address to lookup
         in: query
         name: ip
